@@ -1,0 +1,10 @@
+node_modules
+./*/node_modules
+*/node_modules
+creds.ts
+dist/
+src/public
+src/res.json
+package-lock.json
+src/Fetcher/cred.ts
+utils/*.sh
