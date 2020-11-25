@@ -1,20 +1,20 @@
 import mongoose = require("mongoose");
 
-export const trendSchema = new mongoose.Schema({
-    index :Number,
-    name : String,
-    url : String,
-    tweet_volume : Number
-})
+// export const trendSchema = new mongoose.Schema({
+//     index :Number,
+//     name : String,
+//     url : String,
+//     tweet_volume : Number
+// })
 
-let locationSchema = new mongoose.Schema({
-    name : String,
-    woeid : Number,
-})
+// let locationSchema = new mongoose.Schema({
+//     name : String,
+//     woeid : Number,
+// })
 
 export let responseSchema = new mongoose.Schema({
-    trends : [trendSchema],
+    trends : [],
     as_of : Date,
     created_at : Date,
-    locations: [locationSchema]
+    locations: []
 })

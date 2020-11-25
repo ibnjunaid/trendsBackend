@@ -14,7 +14,7 @@ async function start(Woeid:number) {
     //connect to mongod Instance
     await mongoose.connect(`${URI}/${dbName}`,{useNewUrlParser:true,useUnifiedTopology: true});
 
-    //fetch and parse  data
+    //fetch and parse data
     const responseData = await getTrendsByCountry(Woeid);
 
     //if responseData is returned, implies that the woeid exist 
@@ -39,7 +39,7 @@ async function start(Woeid:number) {
         const savedDoc = await trendresponseData.save();
 
         if (savedDoc){
-            console.info(`Data Saved with id : ${savedDoc._id}`);
+            console.info(`Data Saved with id : ${savedDoc._id} in ${savedDoc.collection}`);
         }
     } else {
         //if reponseData is undefined write to stderr
@@ -82,3 +82,8 @@ const parseTrend = (d:trend,i:number) => {
     };
     return t;
 }
+
+
+setInterval(()=>{
+    start(23424975)
+},10000);
