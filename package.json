@@ -4,7 +4,7 @@
   "description": "Contains code for visualizer API Backend ",
   "main": "app.js",
   "scripts": {
-    "start": "ts-node src/server.ts",
+    "start": "node dist/start.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
