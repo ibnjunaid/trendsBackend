@@ -1,14 +1,13 @@
 import axios from 'axios';
 import mongoose = require("mongoose");
 
-import token from './creds';
 import {frontEndResponse, Trend, trend, twitterResponse} from '../Commons/interfaces';
 import {responseSchema} from './Trend.Model'
 import { dbName, URI } from '../Commons/mongoConfigs';
 import { findPlaceByWoeid, replaceSpaceWith_ } from '../Commons/Woeid-methods';
 
 //Set Twitter API token Here 
-axios.defaults.headers.common['Authorization'] = token.twitterToken;
+axios.defaults.headers.common['Authorization'] = process.env.TWITTER_TOKEN;
 
 export async function fetchAndSaveTrends(Woeid:number) {
     //connect to mongod Instance
