@@ -1,4 +1,4 @@
-import {client, dbName} from '../Commons/mongoConfigs'
+import {client} from '../Commons/mongoConfigs'
 import { findPlaceByWoeid, replaceSpaceWith_ } from '../Commons/Woeid-methods';
 
 

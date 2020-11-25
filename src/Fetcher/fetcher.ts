@@ -10,7 +10,7 @@ import { findPlaceByWoeid, replaceSpaceWith_ } from '../Commons/Woeid-methods';
 //Set Twitter API token Here 
 axios.defaults.headers.common['Authorization'] = token.twitterToken;
 
-async function start(Woeid:number) {
+export async function fetchAndSaveTrends(Woeid:number) {
     //connect to mongod Instance
     await mongoose.connect(`${URI}/${dbName}`,{useNewUrlParser:true,useUnifiedTopology: true});
 
@@ -82,8 +82,3 @@ const parseTrend = (d:trend,i:number) => {
     };
     return t;
 }
-
-
-setInterval(()=>{
-    start(23424975)
-},10000);
