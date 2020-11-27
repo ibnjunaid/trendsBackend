@@ -1,10 +1,10 @@
 export interface place{
-    name : string,
+    name : string ,
     woeid : number,
     placeType : {name : string, code : number }
     country : string,
     url : string,
-    countryCode : string,
+    countryCode : string | null,
     parentid: number
 }
 

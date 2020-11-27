@@ -1,15 +1,15 @@
-import {client} from '../Commons/mongoConfigs'
-import { findPlaceByWoeid, replaceSpaceWith_ } from '../Commons/Woeid-methods';
+import { MongoClient } from 'mongodb';
+import { databaseName } from '../Commons/Configs'
+import { findPlaceByWoeid, replaceSpaceAndDotsWith_ } from '../Commons/Woeid-methods';
 
 
-export async function getTrendByTime(Woeid:number,Ttime :number) {
-    let Query = new Date(Ttime);
-    const connection =  await client.connect();
+export async function getTrendByTime(Woeid:number,Ttime :number,conn: Promise<MongoClient>) {
 
     const timeRange = findtimeRange(Ttime);
+    const connection = await conn;
 
-    const dbResp = await connection.db('trends')
-                        .collection(replaceSpaceWith_(findPlaceByWoeid(Woeid)?.name||''))
+    const dbResp = await connection.db(databaseName)
+                        .collection(replaceSpaceAndDotsWith_(findPlaceByWoeid(Woeid)?.name||''))
                         .find({as_of: {$gt : new Date(timeRange.min), $lt : new Date(timeRange.max)}})
                         .toArray();
     return dbResp;

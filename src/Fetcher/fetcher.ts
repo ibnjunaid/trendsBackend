@@ -1,17 +1,18 @@
 import axios from 'axios';
 import mongoose = require("mongoose");
 
-import {frontEndResponse, Trend, trend, twitterResponse} from '../Commons/interfaces';
-import {responseSchema} from './Trend.Model'
-import { dbName, URI } from '../Commons/mongoConfigs';
-import { findPlaceByWoeid, replaceSpaceWith_ } from '../Commons/Woeid-methods';
+import { frontEndResponse, Trend, trend, twitterResponse } from '../Commons/interfaces';
+import { responseSchema } from './Trend.Model'
+import { databaseName, TWITTER_TOKEN } from '../Commons/Configs';
+import { findPlaceByWoeid, replaceSpaceAndDotsWith_ } from '../Commons/Woeid-methods';
 
 //Set Twitter API token Here 
-axios.defaults.headers.common['Authorization'] = process.env.TWITTER_TOKEN;
+axios.defaults.headers.common['Authorization'] = TWITTER_TOKEN;
 
-export async function fetchAndSaveTrends(Woeid:number) {
-    //connect to mongod Instance
-    await mongoose.connect(`${URI}/${dbName}`,{useNewUrlParser:true,useUnifiedTopology: true});
+export async function fetchAndSaveTrends(Woeid:number,conn: Promise<typeof import("mongoose")>) {
+    const mongoConn = await conn;
+    //Switch to trends databaseName
+    mongoConn.connection.useDb(databaseName);
 
     //fetch and parse data
     const responseData = await getTrendsByCountry(Woeid);
@@ -22,7 +23,7 @@ export async function fetchAndSaveTrends(Woeid:number) {
         //find the place by Woeid
         const match  = findPlaceByWoeid(Woeid);
         //Replace spaces with _ so that it can be used for collection naming;
-        const place = replaceSpaceWith_(match?.name||'');
+        const place = replaceSpaceAndDotsWith_(match?.name||'');
 
         //Create a model for that place   
         const trendModel = mongoose.model(place,responseSchema,place);
@@ -34,15 +35,12 @@ export async function fetchAndSaveTrends(Woeid:number) {
             locations : responseData?.location
         });
     
-        // Save the model to the database
+        // Save the model to the databaseName
         const savedDoc = await trendresponseData.save();
 
         if (savedDoc){
-            console.info(`Data Saved with id : ${savedDoc._id} in ${savedDoc.collection}`);
+            console.info(`Data Saved with id : ${savedDoc._id} in ${savedDoc.collection.name} at ${new Date()}`);
         }
-    } else {
-        //if reponseData is undefined write to stderr
-        console.error("No response Data Received");
     }
 }
 

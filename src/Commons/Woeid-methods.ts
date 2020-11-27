@@ -6,6 +6,7 @@ export function findPlaceByWoeid(Woeid :number){
 }
         
 //Replace spaces with _ so that it can be used for collection naming 
-export function replaceSpaceWith_(name :string) {
-    return name.replace(' ','_');
+export function replaceSpaceAndDotsWith_(name :string) {
+    const x =  name.replace(/\s/g,'_');
+    return x.replace(/\./g,'_');
 }
