@@ -51,7 +51,7 @@ async function distributeWork(d:place,i:number){
     }
 }
 
-function start(){
+async function start(){
     console.log(`Fetch Started at ${ new Date() }`)
     woeidList.forEach(distributeWork);
 }
@@ -61,7 +61,8 @@ app.listen(8080,"localhost",()=>{
     console.log(`Server listening on http://localhost:8080`)
 });
 
-start();
+start()
+.catch(err=>{console.log("ERROR IS BEING HANDELED")});
 
 const intervalID = setInterval(()=>{
     console.log(`Fetch Registred at ${new Date()}`);
