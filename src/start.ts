@@ -60,18 +60,20 @@ function start(){
     woeidList.forEach(distributeWork);
 }
 
+console.log(PORT,HOST,DB_URI);
+
 
 app.listen(PORT,HOST,()=>{
     console.log(`Server listening on http://localhost:${PORT}`)
 });
 
-start();
+// start();
 
-const intervalID = setInterval(()=>{
-    console.log(`Fetch Registred at ${new Date()}`);
-    start();
-},interval);
+// const intervalID = setInterval(()=>{
+//     console.log(`Fetch Registred at ${new Date()}`);
+//     start();
+// },interval);
 
-const pingSelfInterval = setInterval(async ()=>{
-    await axios.get("https://trendsend.herokuapp.com/test");
-},30000);
+// const pingSelfInterval = setInterval(async ()=>{
+//     await axios.get("https://trendsend.herokuapp.com/test");
+// },30000);
