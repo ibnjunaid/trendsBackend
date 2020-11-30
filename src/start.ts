@@ -20,14 +20,17 @@ import {app} from './Server/server'
 import {fetchAndSaveTrends} from './Fetcher/fetcher'
 import woeidList from './data/WOEID.json';
 import { place } from './Commons/interfaces';
-import { databaseName, URI } from './Commons/Configs';
+import { databaseName } from './Commons/Configs';
 import mongoose = require("mongoose");
 
 
 const min = 1000*60;
 const interval = 59*min;
+const PORT = Number(process.env.PORT) || 3000;
+const HOST = process.env.PORT || '0.0.0.0';
+const DB_URI = process.env.ATLAS_MONGO_URI || '';
 
-const conn =  mongoose.connect(URI,{useNewUrlParser:true,useUnifiedTopology: true,dbName:databaseName});
+const conn =  mongoose.connect(DB_URI,{useNewUrlParser:true,useUnifiedTopology: true,dbName:databaseName});
 
 
 function sleep(ms:number){
@@ -57,8 +60,8 @@ function start(){
 }
 
 
-app.listen(8080,"localhost",()=>{
-    console.log(`Server listening on http://localhost:8080`)
+app.listen(PORT,HOST,()=>{
+    console.log(`Server listening on http://localhost:${PORT}`)
 });
 
 start();
@@ -68,3 +71,6 @@ const intervalID = setInterval(()=>{
     start();
 },interval);
 
+const pingSelfInterval = setInterval(async ()=>{
+    await fetch("https://trendsend.herokuapp.com/");
+},30000);

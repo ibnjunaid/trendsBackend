@@ -7,7 +7,7 @@ const routes = express.Router();
 const mongo =   client.connect();
 
 routes.get('/',(req,res)=>{
-    res.redirect('/static/');
+    res.send("Hello World . hit trend/:Woeid?Ttime");
 })
 
 //This path get $Woeid as URI Parameter and $Ttime as query parameters 

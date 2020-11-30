@@ -3,8 +3,11 @@ import mongoose = require("mongoose");
 
 import { frontEndResponse, Trend, trend, twitterResponse } from '../Commons/interfaces';
 import { responseSchema } from './Trend.Model'
-import { databaseName, TWITTER_TOKEN } from '../Commons/Configs';
+import { databaseName } from '../Commons/Configs';
 import { findPlaceByWoeid, replaceSpaceAndDotsWith_ } from '../Commons/Woeid-methods';
+
+//get TWITTER_TOKEN from environment variable
+const TWITTER_TOKEN = process.env.TWITTER_TOKEN ||'';
 
 //Set Twitter API token Here 
 axios.defaults.headers.common['Authorization'] = TWITTER_TOKEN;
