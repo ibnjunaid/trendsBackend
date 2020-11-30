@@ -1,8 +1,12 @@
-import express, { json, Request, Response } from 'express';
-import { client } from '../Commons/Configs';
+import express from 'express';
 import { getTrendByTime } from './dbQuery';
+import { MongoClient } from 'mongodb';
 
+
+const DB_URI = process.env.ATLAS_MONGO_URI || '';
 const routes = express.Router();
+
+const client = new MongoClient(DB_URI,{useUnifiedTopology:true});
 
 const mongo =   client.connect();
 

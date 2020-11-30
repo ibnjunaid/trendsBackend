@@ -28,7 +28,7 @@ import axios from 'axios'
 const min = 1000*60;
 const interval = 59*min;
 const PORT = Number(process.env.PORT);
-const HOST = process.env.PORT || '0.0.0.0';
+const HOST = process.env.HOST || '0.0.0.0';
 const DB_URI = process.env.ATLAS_MONGO_URI || '';
 
 const conn =  mongoose.connect(DB_URI,{useNewUrlParser:true,useUnifiedTopology: true,dbName:databaseName});
@@ -60,20 +60,19 @@ function start(){
     woeidList.forEach(distributeWork);
 }
 
-console.log(PORT,HOST,DB_URI);
 
 
 app.listen(PORT,HOST,()=>{
     console.log(`Server listening on http://localhost:${PORT}`)
 });
 
-// start();
+start();
 
-// const intervalID = setInterval(()=>{
-//     console.log(`Fetch Registred at ${new Date()}`);
-//     start();
-// },interval);
+const intervalID = setInterval(()=>{
+    console.log(`Fetch Registred at ${new Date()}`);
+    start();
+},interval);
 
-// const pingSelfInterval = setInterval(async ()=>{
-//     await axios.get("https://trendsend.herokuapp.com/test");
-// },30000);
+const pingSelfInterval = setInterval(async ()=>{
+    await axios.get("https://trendsend.herokuapp.com/test");
+},30000);

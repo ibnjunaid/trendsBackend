@@ -1,1 +1,1 @@
-web:ts-node start.ts
+web:ts-node src/start.ts
