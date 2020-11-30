@@ -22,11 +22,12 @@ import woeidList from './data/WOEID.json';
 import { place } from './Commons/interfaces';
 import { databaseName } from './Commons/Configs';
 import mongoose = require("mongoose");
+import axios from 'axios'
 
 
 const min = 1000*60;
 const interval = 59*min;
-const PORT = Number(process.env.PORT) || 3000;
+const PORT = Number(process.env.PORT);
 const HOST = process.env.PORT || '0.0.0.0';
 const DB_URI = process.env.ATLAS_MONGO_URI || '';
 
@@ -72,5 +73,5 @@ const intervalID = setInterval(()=>{
 },interval);
 
 const pingSelfInterval = setInterval(async ()=>{
-    await fetch("https://trendsend.herokuapp.com/");
+    await axios.get("https://trendsend.herokuapp.com/test");
 },30000);

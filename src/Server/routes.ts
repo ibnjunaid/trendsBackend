@@ -18,5 +18,8 @@ routes.get('/trend/:Woeid',async (req,res)=>{
     res.send(resp[0]);
 })
 
+routes.get('/test',async(req,res)=>{
+    res.send(`res Recieved form ${req.ip}`);
+})
 
 export default routes;
