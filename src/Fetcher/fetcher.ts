@@ -13,38 +13,44 @@ const TWITTER_TOKEN = process.env.TWITTER_TOKEN ||'';
 axios.defaults.headers.common['Authorization'] = TWITTER_TOKEN;
 
 export async function fetchAndSaveTrends(Woeid:number,conn: Promise<typeof import("mongoose")>) {
-    const mongoConn = await conn;
-    //Switch to trends databaseName
-    mongoConn.connection.useDb(databaseName);
+    try {
+        const mongoConn = await conn;
+        //Switch to trends databaseName
+        mongoConn.connection.useDb(databaseName);
 
-    //fetch and parse data
-    const responseData = await getTrendsByCountry(Woeid);
+        //fetch and parse data
+        const responseData = await getTrendsByCountry(Woeid);
 
-    //if responseData is returned, implies that the woeid exist 
-    if(responseData) {
+        //if responseData is returned, implies that the woeid exist 
+        if(responseData) {
 
-        //find the place by Woeid
-        const match  = findPlaceByWoeid(Woeid);
-        //Replace spaces with _ so that it can be used for collection naming;
-        const place = replaceSpaceAndDotsWith_(match?.name||'');
+            //find the place by Woeid
+            const match  = findPlaceByWoeid(Woeid);
+            //Replace spaces with _ so that it can be used for collection naming;
+            const place = replaceSpaceAndDotsWith_(match?.name||'');
 
-        //Create a model for that place   
-        const trendModel = mongoose.model(place,responseSchema,place);
+            //Create a model for that place   
+            const trendModel = mongoose.model(place,responseSchema,place);
 
-        // Add data to that model
-        const trendresponseData = new trendModel({
-            trends : responseData?.trends,
-            as_of : responseData?.as_of,
-            locations : responseData?.location
-        });
-    
-        // Save the model to the databaseName
-        const savedDoc = await trendresponseData.save();
+            // Add data to that model
+            const trendresponseData = new trendModel({
+                trends : responseData?.trends,
+                as_of : responseData?.as_of,
+                locations : responseData?.location
+            });
+        
+            // Save the model to the databaseName
+            const savedDoc = await trendresponseData.save();
 
-        if (savedDoc){
-            console.info(`Data Saved with id : ${savedDoc._id} in ${savedDoc.collection.name} at ${new Date()}`);
-        }
+            if (savedDoc){
+                console.info(`Data Saved with id : ${savedDoc._id} in ${savedDoc.collection.name} at ${new Date()}`);
+            }
     }
+        
+    }catch (error) {
+        console.error(error);   
+    }
+    
 }
 
 
@@ -59,7 +65,7 @@ async function getTrendsByCountry(woeid:number){
         return parseResponse(response.data[0]);
     }
     catch (err) {
-        console.log(err);
+        console.error(err);
     }
 }
 

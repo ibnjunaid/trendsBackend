@@ -1,5 +1,5 @@
 import express from 'express';
-import { getTrendByTime } from './dbQuery';
+import { getTrendByTime,getTrendByWoeid } from './dbQuery';
 import { MongoClient } from 'mongodb';
 
 
@@ -18,12 +18,17 @@ routes.get('/',(req,res)=>{
 //Woeid : Integer
 //Ttime : ISO date String
 routes.get('/trend/:Woeid',async (req,res)=>{
-    const resp = await getTrendByTime(Number(req.params.Woeid),Number(req.query.Ttime),mongo);
+    const resp = await getTrendByTime(Number(req.params.Woeid),Number(req.query.Ttime),mongo) ||[];
     res.send(resp[0]);
 })
 
 routes.get('/test',async(req,res)=>{
-    res.send(`res Recieved form ${req.ip}`);
+    res.send(`req Recieved form ${req.ip}`);
+})
+
+routes.get('/t/:Woeid',async(req,res)=>{
+    const resp = await getTrendByWoeid(Number(req.params.Woeid),mongo);
+    res.send(resp);
 })
 
 export default routes;
