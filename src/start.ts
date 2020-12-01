@@ -1,5 +1,5 @@
 /*******************************************************
- * Copyright (C) 2010-2011 Osamabinjunaid <Osamabinjunaid36@gmail.com>
+ * Copyright (C) 2020 Osamabinjunaid <Osamabinjunaid36@gmail.com>
  * 
  * This file is part of trendsVisualizer.
  * 
