@@ -4,15 +4,19 @@ import { findPlaceByWoeid, replaceSpaceAndDotsWith_ } from '../Commons/Woeid-met
 
 
 export async function getTrendByTime(Woeid:number,Ttime :number,conn: Promise<MongoClient>) {
+    try{
+        const timeRange = findtimeRange(Ttime);
+        const connection = await conn;
+    
+        const dbResp = await connection.db(databaseName)
+                            .collection(replaceSpaceAndDotsWith_(findPlaceByWoeid(Woeid)?.name||''))
+                            .find({as_of: {$gt : new Date(timeRange.min), $lt : new Date(timeRange.max)}})
+                            .toArray();
+        return dbResp;
+    }catch(err){
+        console.error(err);
+    }
 
-    const timeRange = findtimeRange(Ttime);
-    const connection = await conn;
-
-    const dbResp = await connection.db(databaseName)
-                        .collection(replaceSpaceAndDotsWith_(findPlaceByWoeid(Woeid)?.name||''))
-                        .find({as_of: {$gt : new Date(timeRange.min), $lt : new Date(timeRange.max)}})
-                        .toArray();
-    return dbResp;
 }
 
 function findtimeRange(timeStamp:number){
@@ -21,4 +25,18 @@ function findtimeRange(timeStamp:number){
     const min = hrs; // min is HH:00:00:000
     const max = hrs + 59*60*1000 + 59*1000 + 999; // max is HH:59:59:999
     return { min : min, max: max};
+}
+
+export async function getTrendByWoeid(Woeid:number, conn: Promise<MongoClient>){
+    try{
+        const connection = await conn;
+
+        const dbResp = await connection.db(databaseName)
+                             .collection( replaceSpaceAndDotsWith_( findPlaceByWoeid(Woeid) ?.name || '') )
+                             .find({}).limit(24).sort({"as_of":-1})
+                             .toArray();
+        return dbResp;        
+    }catch (error) {
+        console.error(error);
+    }
 }

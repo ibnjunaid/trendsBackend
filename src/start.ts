@@ -1,5 +1,5 @@
 /*******************************************************
- * Copyright (C) 2010-2011 Osamabinjunaid <Osamabinjunaid36@gmail.com>
+ * Copyright (C) 2020 Osamabinjunaid <Osamabinjunaid36@gmail.com>
  * 
  * This file is part of trendsVisualizer.
  * 
@@ -21,13 +21,18 @@ import {fetchAndSaveTrends} from './Fetcher/fetcher'
 import woeidList from './data/WOEID.json';
 import { place } from './Commons/interfaces';
 import { databaseName, URI ,TWITTER_TOKEN_ONE,TWITTER_TOKEN_TWO,TWITTER_TOKEN_THREE  } from './Commons/Configs';
+
 import mongoose = require("mongoose");
+import axios from 'axios'
 
 
 const min = 1000*60;
 const interval = 59*min;
+const PORT = Number(process.env.PORT);
+const HOST = process.env.HOST || '0.0.0.0';
+const DB_URI = process.env.ATLAS_MONGO_URI || '';
 
-const conn =  mongoose.connect(URI,{useNewUrlParser:true,useUnifiedTopology: true,dbName:databaseName});
+const conn =  mongoose.connect(DB_URI,{useNewUrlParser:true,useUnifiedTopology: true,dbName:databaseName});
 
 
 function sleep(ms:number){
@@ -57,8 +62,8 @@ async function start(){
 }
 
 
-app.listen(8080,"localhost",()=>{
-    console.log(`Server listening on http://localhost:8080`)
+app.listen(PORT,HOST,()=>{
+    console.log(`Server listening on http://localhost:${PORT}`)
 });
 
 start()
@@ -69,3 +74,6 @@ const intervalID = setInterval(()=>{
     start();
 },interval);
 
+const pingSelfInterval = setInterval(async ()=>{
+    await axios.get("https://trendsend.herokuapp.com/test");
+},30000);
