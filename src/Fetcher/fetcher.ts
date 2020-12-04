@@ -3,16 +3,23 @@ import mongoose = require("mongoose");
 
 import { frontEndResponse, Trend, trend, twitterResponse } from '../Commons/interfaces';
 import { responseSchema } from './Trend.Model'
-import { databaseName, TWITTER_TOKEN_ONE,TWITTER_TOKEN_TWO } from '../Commons/Configs';
+import { databaseName } from '../Commons/Configs';
 import { findPlaceByWoeid, replaceSpaceAndDotsWith_ } from '../Commons/Woeid-methods';
 
-export async function fetchAndSaveTrends(Woeid:number,conn: Promise<typeof import("mongoose")>,token: String) {
-    const mongoConn = await conn;
-    //Switch to trends databaseName
-    mongoConn.connection.useDb(databaseName);
+//get TWITTER_TOKEN from environment variable
+const TWITTER_TOKEN = process.env.TWITTER_TOKEN ||'';
 
-    //fetch and parse data
-    const responseData = await getTrendsByCountry(Woeid,token);
+//Set Twitter API token Here 
+axios.defaults.headers.common['Authorization'] = TWITTER_TOKEN;
+
+export async function fetchAndSaveTrends(Woeid:number,conn: Promise<typeof import("mongoose")>) {
+    try {
+        const mongoConn = await conn;
+        //Switch to trends databaseName
+        mongoConn.connection.useDb(databaseName);
+
+        //fetch and parse data
+        const responseData = await getTrendsByCountry(Woeid);
 
         //if responseData is returned, implies that the woeid exist 
         if(responseData) {
@@ -39,6 +46,11 @@ export async function fetchAndSaveTrends(Woeid:number,conn: Promise<typeof impor
                 console.info(`Data Saved with id : ${savedDoc._id} in ${savedDoc.collection.name} at ${new Date()}`);
             }
     }
+        
+    }catch (error) {
+        console.error(error);   
+    }
+    
 }
 
 
@@ -47,13 +59,9 @@ export async function fetchAndSaveTrends(Woeid:number,conn: Promise<typeof impor
     * fetches the data and passes to parseResponse function for adding trend index
     * and remove unnecessary data    
 */
-async function getTrendsByCountry(woeid:number,token:String){
+async function getTrendsByCountry(woeid:number){
     try {
-        const response = await axios.get<Array<twitterResponse>>(`https://api.twitter.com/1.1/trends/place.json?id=${woeid}`,{
-            headers: {
-              Authorization: 'Bearer ' + token
-            }
-          });
+        const response = await axios.get<Array<twitterResponse>>(`https://api.twitter.com/1.1/trends/place.json?id=${woeid}`);
         return parseResponse(response.data[0]);
     }
     catch (err) {

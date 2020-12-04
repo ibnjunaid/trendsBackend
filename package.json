@@ -5,8 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "ts-node src/start.ts",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/start.ts"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "trendsVisualizer",
@@ -29,7 +28,6 @@
     "validator": "^12.1.0"
   },
   "devDependencies": {
-    "@types/d3-time": "^1.0.10",
-    "nodemon": "^2.0.6"
+    "@types/d3-time": "^1.0.10"
   }
 }

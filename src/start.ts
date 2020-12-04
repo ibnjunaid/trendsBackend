@@ -20,8 +20,7 @@ import {app} from './Server/server'
 import {fetchAndSaveTrends} from './Fetcher/fetcher'
 import woeidList from './data/WOEID.json';
 import { place } from './Commons/interfaces';
-import { databaseName, URI ,TWITTER_TOKEN_ONE,TWITTER_TOKEN_TWO,TWITTER_TOKEN_THREE  } from './Commons/Configs';
-
+import { databaseName } from './Commons/Configs';
 import mongoose = require("mongoose");
 import axios from 'axios'
 
@@ -39,18 +38,18 @@ function sleep(ms:number){
     return new Promise(resolve => setTimeout(resolve,ms));
 }
 
-async function fetchAndPause(woeid: number, mul : number , token: string){
+async function fetchAndPause(woeid: number, mul : number){
     await sleep(mul * min);
-    await fetchAndSaveTrends(woeid,conn,token);
+    await fetchAndSaveTrends(woeid,conn);
 }
 
 async function distributeWork(d:place,i:number){
     if(i < 74){
-        await fetchAndPause(d.woeid,0,TWITTER_TOKEN_ONE);
+        await fetchAndPause(d.woeid,0);
     }else if(i >= 74 && i <= 148){
-        await fetchAndPause(d.woeid,17,TWITTER_TOKEN_TWO);
+        await fetchAndPause(d.woeid,17);
     }else if(i >= 149 &&  i<= 222){
-        await fetchAndPause(d.woeid,35,TWITTER_TOKEN_THREE);
+        await fetchAndPause(d.woeid,35);
     }else{
         console.error(`Check Woeid : if it contains more than 222 places`);
     }
