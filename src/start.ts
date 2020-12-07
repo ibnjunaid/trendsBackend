@@ -33,7 +33,8 @@ function sleep(ms:number){
 async function fetchTrends(){
     return Promise.all(endPoints.map(async (d) => {
         await sleep(10) ; 
-        return await axios.get(d);
+        const res = await axios.get(d);
+        return res.data;
     }));
 }
 
