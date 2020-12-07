@@ -1,63 +1,40 @@
 /*******************************************************
- * Copyright (C) 2020 Osamabinjunaid <Osamabinjunaid36@gmail.com>
+ * 2020 Osamabinjunaid <Osamabinjunaid36@gmail.com>
  * 
  * This file is part of trendsVisualizer.
- * 
- * TrendsVisualizer can not be copied and/or distributed without the express
- * permission of Osama Bin Junaid
  *******************************************************/
 
 /*##############################
 * This is file is the entry to the App.
-* setInterval calls the start() after each 59 minutes passed
-* start() loops over the woeidList and passes an object of type place and index to distributeWork
-* distributeWork() limits the request by sending only 74 request in a 15 minutes window 
-* fetchAndPause() helps by fetching and saving only 74 request and pausing for 17 minutes
+* fetechInterval is a timer that calls the fetchTrends() after each 16 minutes passed
 * sleep() returns a promise which resloves after *ms milliseconds 
+* fetchTrends sleeps so as to prevent huge number of database connections
 ################################*/
 
 import {app} from './Server/server'
-import {fetchAndSaveTrends} from './Fetcher/fetcher'
-import woeidList from './data/WOEID.json';
-import { place } from './Commons/interfaces';
-import { databaseName } from './Commons/Configs';
-import mongoose = require("mongoose");
 import axios from 'axios'
 
 
 const min = 1000*60;
-const interval = 59*min;
+const interval = 16*min;
 const PORT = Number(process.env.PORT);
 const HOST = process.env.HOST || '0.0.0.0';
-const DB_URI = process.env.ATLAS_MONGO_URI || '';
 
-const conn =  mongoose.connect(DB_URI,{useNewUrlParser:true,useUnifiedTopology: true,dbName:databaseName});
-
+const endPoints = [
+    "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/param75",
+    "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/param150",
+    "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/param225"
+];
 
 function sleep(ms:number){
     return new Promise(resolve => setTimeout(resolve,ms));
 }
 
-async function fetchAndPause(woeid: number, mul : number){
-    await sleep(mul * min);
-    await fetchAndSaveTrends(woeid,conn);
-}
-
-async function distributeWork(d:place,i:number){
-    if(i < 74){
-        await fetchAndPause(d.woeid,0);
-    }else if(i >= 74 && i <= 148){
-        await fetchAndPause(d.woeid,17);
-    }else if(i >= 149 &&  i<= 222){
-        await fetchAndPause(d.woeid,35);
-    }else{
-        console.error(`Check Woeid : if it contains more than 222 places`);
-    }
-}
-
-async function start(){
-    console.log(`Fetch Started at ${ new Date() }`)
-    woeidList.forEach(distributeWork);
+async function fetchTrends(){
+    return Promise.all(endPoints.map(async (d) => {
+        await sleep(10) ; 
+        return await axios.get(d);
+    }));
 }
 
 
@@ -65,13 +42,18 @@ app.listen(PORT,HOST,()=>{
     console.log(`Server listening on http://localhost:${PORT}`)
 });
 
-start()
-.catch(err=>{console.log("ERROR IS BEING HANDELED")});
 
-const intervalID = setInterval(()=>{
-    console.log(`Fetch Registred at ${new Date()}`);
-    start();
-},interval);
+fetchTrends()
+    .then(console.log)
+    .catch(console.error);
+
+
+const fetchInterval = setInterval(()=>{
+    console.log(`Fetch Registered on ${new Date}`);
+    fetchTrends()
+    .then(console.log)
+    .catch(console.error)
+},interval)
 
 const pingSelfInterval = setInterval(async ()=>{
     await axios.get("https://trendsend.herokuapp.com/test");
