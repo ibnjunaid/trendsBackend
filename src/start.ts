@@ -6,18 +6,19 @@
 
 /*##############################
 * This is file is the entry to the App.
-* fetechInterval is a timer that calls the fetchTrends() after each 16 minutes passed
+* fetchInterval is a timer that calls the fetchTrends() after each 16 minutes passed
 * sleep() returns a promise which resloves after *ms milliseconds 
 * fetchTrends sleeps so as to prevent huge number of database connections
 ################################*/
+import {app} from './server';
+import axios from 'axios';
 
-import {app} from './Server/server'
-import axios from 'axios'
+import cron from 'node-cron';
+import { deleteOldTrends, getNewPlaces } from './utils/weeklyFuncs';
 
 
-const min = 1000*60;
-const interval = 16*min;
-const PORT = Number(process.env.PORT);
+const interval = 16*1000*60;
+const PORT = Number(process.env.PORT) || 8080;
 const HOST = process.env.HOST || '0.0.0.0';
 
 const endPoints = [
@@ -39,23 +40,29 @@ async function fetchTrends(){
 }
 
 
+// const fetchInterval = setInterval(()=>{
+//     console.log(`Fetch Registered on ${new Date}`);
+//     fetchTrends()
+//     .then(console.log)
+//     .catch(console.error)
+// },interval)
+
+
 app.listen(PORT,HOST,()=>{
-    console.log(`Server listening on http://localhost:${PORT}`)
+    console.log(`Server listening on http://:${PORT}`)
 });
 
-
-fetchTrends()
-    .then(console.log)
-    .catch(console.error);
-
-
-const fetchInterval = setInterval(()=>{
-    console.log(`Fetch Registered on ${new Date}`);
-    fetchTrends()
-    .then(console.log)
-    .catch(console.error)
-},interval)
-
+// This function basically prevents heroku 
+// from turing of the server because of inactivity
 const pingSelfInterval = setInterval(async ()=>{
-    await axios.get("https://trendsend.herokuapp.com/test");
+    try {
+        await axios.get("https://trendsend.herokuapp.com/ping");
+    } catch (error) {
+        console.error("What the hell !! Cant ping self");
+    }
 },30000);
+
+
+// cron.schedule('0 0 * * 0',async() =>{
+//     await Promise.all([deleteOldTrends(),getNewPlaces()])
+// })
