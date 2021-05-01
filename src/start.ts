@@ -21,17 +21,23 @@ const interval = 16*1000*60;
 const PORT = Number(process.env.PORT) || 8080;
 const HOST = process.env.HOST || '0.0.0.0';
 
-const endPoints = [
-    "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/param75",
-    "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/param150",
-    "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/param225"
+const endPoints1 = [
+    "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/samao",
+    "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/ritikh",
+    "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/dzai"
 ];
+
+const endPoints2 = [
+    "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/samao2",
+    "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/ritikh2",
+    "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/dzai2"
+]
 
 function sleep(ms:number){
     return new Promise(resolve => setTimeout(resolve,ms));
 }
 
-async function fetchTrends(){
+async function fetchTrends(endPoints:string[]){
     return Promise.all(endPoints.map(async (d) => {
         await sleep(10) ; 
         const res = await axios.get(d);
@@ -40,16 +46,25 @@ async function fetchTrends(){
 }
 
 
-// const fetchInterval = setInterval(()=>{
-//     console.log(`Fetch Registered on ${new Date}`);
-//     fetchTrends()
-//     .then(console.log)
-//     .catch(console.error)
-// },interval)
+//Run every 16 minute
+const fetchInterval1 = setInterval(()=>{
+    console.log(`Fetch Registered on ${new Date}`);
+    fetchTrends(endPoints1)
+    .then(console.log)
+    .catch(console.error)
+},interval)
 
+
+//Run every 32 minute 
+const fetchInterval2 = setInterval(()=>{
+    console.log(`Fetch Registered on ${new Date}`);
+    fetchTrends(endPoints1)
+    .then(console.log)
+    .catch(console.error)
+},interval*2);
 
 app.listen(PORT,HOST,()=>{
-    console.log(`Server listening on http://:${PORT}`)
+    console.log(`Server listening on ${PORT}`)
 });
 
 // This function basically prevents heroku 
@@ -63,6 +78,6 @@ const pingSelfInterval = setInterval(async ()=>{
 },30000);
 
 
-// cron.schedule('0 0 * * 0',async() =>{
-//     await Promise.all([deleteOldTrends(),getNewPlaces()])
-// })
+cron.schedule('0 0 * * 0',async() =>{
+    await Promise.all([deleteOldTrends(),getNewPlaces()])
+})
