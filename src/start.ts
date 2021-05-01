@@ -58,7 +58,7 @@ const fetchInterval1 = setInterval(()=>{
 //Run every 32 minute 
 const fetchInterval2 = setInterval(()=>{
     console.log(`Fetch Registered on ${new Date}`);
-    fetchTrends(endPoints1)
+    fetchTrends(endPoints2)
     .then(console.log)
     .catch(console.error)
 },interval*2);
