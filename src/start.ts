@@ -17,7 +17,7 @@ import cron from 'node-cron';
 import { deleteOldTrends, getNewPlaces } from './utils/weeklyFuncs';
 
 
-const interval = 16*1000*60;
+const interval = 900000;
 const PORT = Number(process.env.PORT) || 8080;
 const HOST = process.env.HOST || '0.0.0.0';
 
@@ -48,7 +48,7 @@ async function fetchTrends(endPoints:string[]){
 
 //Run every 16 minute
 const fetchInterval1 = setInterval(()=>{
-    console.log(`Fetch Registered on ${new Date}`);
+    console.log(`Fetch1  Registered on ${(new Date).toString()}`);
     fetchTrends(endPoints1)
     .then(console.log)
     .catch(console.error)
@@ -57,11 +57,11 @@ const fetchInterval1 = setInterval(()=>{
 
 //Run every 32 minute 
 const fetchInterval2 = setInterval(()=>{
-    console.log(`Fetch Registered on ${new Date}`);
+    console.log(`Fetch Registered on ${(new Date).toString()}`);
     fetchTrends(endPoints2)
     .then(console.log)
     .catch(console.error)
-},interval*2);
+},(interval*2)+9000);
 
 app.listen(PORT,HOST,()=>{
     console.log(`Server listening on ${PORT}`)
