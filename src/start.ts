@@ -45,25 +45,8 @@ async function fetchTrends(endPoints:string[]){
     }));
 }
 
-
-//Run every 16 minute
-const fetchInterval1 = setInterval(()=>{
-    console.log(`Fetch1  Registered on ${(new Date).toString()}`);
-    fetchTrends(endPoints1)
-    .then(console.log)
-    .catch(console.error)
-},interval)
-
-
-//Run every 32 minute 
-const fetchInterval2 = setInterval(()=>{
-    console.log(`Fetch Registered on ${(new Date).toString()}`);
-    fetchTrends(endPoints2)
-    .then(console.log)
-    .catch(console.error)
-},(interval*2)+9000);
-
 app.listen(PORT,HOST,()=>{
+    console.log('Server started on', new Date().toString())
     console.log(`Server listening on ${PORT}`)
 });
 
@@ -78,6 +61,30 @@ const pingSelfInterval = setInterval(async ()=>{
 },30000);
 
 
-cron.schedule('0 0 * * 0',async() =>{
+cron.schedule('0 0 0 * * 0',async() =>{
     await Promise.all([deleteOldTrends(),getNewPlaces()])
+})
+
+
+// Run every 16 minute
+
+cron.schedule('*/16 * * * *',()=>{
+    console.log(`Fetch1  Registered on ${(new Date).toString()}`);
+    fetchTrends(endPoints1)
+    .then(console.log)
+    .catch((error) =>{
+        console.error("An error Occured on Fetch1: ");
+        console.error(new Date().toString(),error.message)
+    })})
+
+//Run every 32 minute 
+
+cron.schedule('*/32 * * * *',()=>{
+    console.log(`Fetch2 Registered on ${(new Date).toString()}`);
+    fetchTrends(endPoints2)
+    .then(console.log)
+    .catch((error) =>{
+        console.error("An error Occured on Fetch2: ");
+        console.error(new Date().toString(),error.message)
+    })
 })

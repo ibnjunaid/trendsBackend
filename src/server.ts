@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import rootApis from './apis/rootApis';
 import placeApis from './apis/placeApis';
 import bodyParser from 'body-parser';
+import compression from 'compression';
 
 mongoose.connect(process.env.ATLAS_MONGO_URI ||'',{
     useNewUrlParser : true,
@@ -27,6 +28,9 @@ app.use('/static', express.static(path.join(__dirname, '../../public')))
 
 //Allow Cross Origin Resource Sharing 
 app.use(cors());
+
+//Use compression 
+app.use(compression());
 
 
 //Route to different paths

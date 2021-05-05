@@ -8,13 +8,14 @@ import { ByWoeidPipe,
 export const getTrendByWoeid = async (req:Request, res:Response) => {
     try { 
         const woeid = Number(req.query.woeid);
+
         const data = await trendObject.aggregate(ByWoeidPipe(woeid));
         
         if(data.length){
             res.json({
                 status : true,
                 message : `Fetched data for woeid : ${woeid}`,
-                data : data 
+                data : data
             })
         } else {
             res.status(404)
