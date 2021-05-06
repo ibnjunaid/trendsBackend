@@ -62,29 +62,28 @@ const pingSelfInterval = setInterval(async ()=>{
 
 
 cron.schedule('0 0 0 * * 0',async() =>{
+    console.log('Cron  Called on ' ,Date().toString());
     await Promise.all([deleteOldTrends(),getNewPlaces()])
 })
 
 
-// Run every 16 minute
+// Run every 32 minute and time a function to run after 16 minutes
 
-// cron.schedule('*/16 * * * *',()=>{
-//     console.log(`Fetch1  Registered on ${(new Date).toString()}`);
-//     fetchTrends(endPoints1)
-//     .then(console.log)
-//     .catch((error) =>{
-//         console.error("An error Occured on Fetch1: ");
-//         console.error(new Date().toString(),error.message)
-//     })})
-
-//Run every 32 minute 
-
-// cron.schedule('*/32 * * * *',()=>{
-//     console.log(`Fetch2 Registered on ${(new Date).toString()}`);
-//     fetchTrends(endPoints2)
-//     .then(console.log)
-//     .catch((error) =>{
-//         console.error("An error Occured on Fetch2: ");
-//         console.error(new Date().toString(),error.message)
-//     })
-// })
+const i2 = setInterval(()=>{
+    console.log(`Fetch2 Registered on ${(new Date).toString()}`);
+    fetchTrends(endPoints2)
+    .then(console.log)
+    .catch((error) =>{
+        console.error("An error Occured on Fetch2: ");
+        console.error(new Date().toString(),error.message)
+    })
+    setTimeout(()=>{
+        console.log(`Fetch1  Registered on ${(new Date).toString()}`);
+        fetchTrends(endPoints1)
+        .then(console.log)
+        .catch((error) =>{
+            console.error("An error Occured on Fetch1: ");
+            console.error(new Date().toString(),error.message)
+        })
+    },16*60*1000)
+},32*60*1000)
