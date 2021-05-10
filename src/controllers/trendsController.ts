@@ -1,27 +1,28 @@
+import urlencode, {decode} from 'urlencode'
 import {Request,Response} from 'express';
 import { trendObject } from '../models/Trend.Model';
-import { ByWoeidPipe, 
+import { ByNamePipe, 
         sortByMaxTweetVolume, 
         TrendingLocationsPipe,
         ByWoeidAndDatePipe } from '../utils/pipelines';
 
-export const getTrendByWoeid = async (req:Request, res:Response) => {
+export const getTrendByPlaceName = async (req:Request, res:Response) => {
     try { 
-        const woeid = Number(req.query.woeid);
+        const placeName = urlencode.decode(String(req.query.placeName))
 
-        const data = await trendObject.aggregate(ByWoeidPipe(woeid));
+        const data = await trendObject.aggregate(ByNamePipe(placeName));
         
         if(data.length){
             res.json({
                 status : true,
-                message : `Fetched data for woeid : ${woeid}`,
+                message : `Fetched data for woeid : ${placeName}`,
                 data : data
             })
         } else {
             res.status(404)
                 .json({
                     status : false,
-                    message : `Data Doesn't exist for ${woeid}`
+                    message : `Data Doesn't exist for ${placeName}`
                 })
         }
     } catch (error) {
@@ -92,17 +93,16 @@ export const getTrendsWithMaxTweetVolume = async (req:Request, res:Response) => 
     }   
 }
 
-export const getLocationsWhereTrending = async (req:Request, res :Response) => {
+export const getTrendDetails = async (req:Request, res :Response) => {
     try {
         const pipeline = TrendingLocationsPipe(req.body.trend);
+        const trendingLocations = await trendObject.aggregate(pipeline);
     
-        const data = await trendObject.aggregate(pipeline);
-    
-        if(data.length){
+        if(trendingLocations.length){
             res.json({
                 status : true,
                 message : `Sucessfully fetched locations for trend : ${req.body.trend}`,
-                data : data
+                data : trendingLocations
             })
         }
         else {

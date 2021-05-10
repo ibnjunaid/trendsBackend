@@ -7,6 +7,8 @@ import rootApis from './apis/rootApis';
 import placeApis from './apis/placeApis';
 import bodyParser from 'body-parser';
 import compression from 'compression';
+const morgan = require('morgan')
+
 
 mongoose.connect(process.env.ATLAS_MONGO_URI ||'',{
     useNewUrlParser : true,
@@ -32,11 +34,13 @@ app.use(cors());
 //Use compression 
 app.use(compression());
 
+app.use(morgan("dev"));
 
 //Route to different paths
 app.use('',rootApis);
 app.use('/trends/',trendApis);
-app.use('/place',placeApis)
+app.use('/place',placeApis);
+
 
 //404 route matches when none of the above pattern matches
 app.use((req,res,next) =>{

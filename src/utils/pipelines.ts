@@ -64,12 +64,12 @@ export const TrendingLocationsPipe = (trend:string) => {
     ]);
 }
 
-export const ByWoeidPipe  =(woeid : Number) => {
+export const ByNamePipe  =(name : String) => {
   return (
     [
       {
         '$match': {
-          'woeid': woeid
+          'name': name
         }
       }, {
         '$unwind': {
