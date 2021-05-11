@@ -4,7 +4,8 @@ import { trendObject } from '../models/Trend.Model';
 import { ByNamePipe, 
         sortByMaxTweetVolume, 
         TrendingLocationsPipe,
-        ByWoeidAndDatePipe } from '../utils/pipelines';
+        ByWoeidAndDatePipe, 
+        FirstTrending} from '../utils/pipelines';
 
 export const getTrendByPlaceName = async (req:Request, res:Response) => {
     try { 
@@ -97,19 +98,23 @@ export const getTrendDetails = async (req:Request, res :Response) => {
     try {
         const pipeline = TrendingLocationsPipe(req.body.trend);
         const trendingLocations = await trendObject.aggregate(pipeline);
-    
+        const firstSeen  = ( await trendObject.aggregate(FirstTrending(req.body.trend)))[0] || {} 
+
         if(trendingLocations.length){
             res.json({
                 status : true,
                 message : `Sucessfully fetched locations for trend : ${req.body.trend}`,
-                data : trendingLocations
+                data : {
+                        firstSeen : firstSeen,
+                        trendingLocations
+                    }
             })
         }
         else {
             res.status(404)
                 .json({
                     status : false,
-                    message : "Trend Doesnt Exist"
+                    message : `Trend ${req.body.trend} Doesn't Exist`
                 })
         }
     } catch (error) {

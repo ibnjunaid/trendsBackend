@@ -39,6 +39,60 @@ export const sortByMaxTweetVolume = [
 export const TrendingLocationsPipe = (trend:string) => {
     return ([
       {
+          '$unwind': {
+              'path': '$trends'
+          }
+      }, {
+          '$project': {
+              'trend': '$trends.name', 
+              'volume': '$trends.tweet_volume', 
+              'index': '$trends.index', 
+              'place': '$name', 
+              'as_of': 1
+          }
+      }, {
+          '$match': {
+              'trend': trend
+          }
+      }, {
+          '$sort': {
+              'as_of': -1
+          }
+      }, {
+          '$group': {
+              '_id': '$place', 
+              'fieldN': {
+                  '$push': '$$ROOT'
+              }
+          }
+      }, {
+          '$project': {
+              '_id': 0, 
+              'trend': {
+                  '$arrayElemAt': [
+                      '$fieldN', 0
+                  ]
+              }
+          }
+      }, {
+          '$sort': {
+              'trend.index': 1
+          }
+      }, {
+          '$project': {
+              'index': '$trend.index', 
+              'as_of': '$trend.as_of', 
+              'volume': '$trend.volume', 
+              'place': '$trend.place'
+          }
+      }
+  ])
+}
+
+export const FirstTrending = (trend : String) => {
+  return (
+    [
+      {
         '$unwind': {
           'path': '$trends'
         }
@@ -46,7 +100,8 @@ export const TrendingLocationsPipe = (trend:string) => {
         '$project': {
           'trend': '$trends.name', 
           'volume': '$trends.tweet_volume', 
-          'name': 1, 
+          'index': '$trends.index', 
+          'place': '$name', 
           'as_of': 1
         }
       }, {
@@ -54,15 +109,22 @@ export const TrendingLocationsPipe = (trend:string) => {
           'trend': trend
         }
       }, {
-        '$group': {
-          '_id': '$name', 
-          'avg_tweet_volume': {
-            '$avg': '$volume'
-          }
+        '$sort': {
+          'as_of': 1
         }
-      },
-    ]);
-}
+      }, {
+        '$project': {
+          '_id': 0, 
+          'as_of':1,
+          'trend': 1, 
+          'volume': 1, 
+          'index': 1, 
+          'place': 1
+        }
+      }
+    ]
+  )
+} 
 
 export const ByNamePipe  =(name : String) => {
   return (
@@ -137,3 +199,4 @@ export const ByWoeidAndDatePipe = (woeid:Number,startTime:number,endTime:number)
     ]
   )
 }
+
