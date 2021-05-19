@@ -23,5 +23,5 @@ interface trendObjectInterface extends Document{
     woeid : Number
 };
 
-export const trendObject = model<trendObjectInterface>('trend',responseSchema);
+export const trendObject = model<any>('trend',responseSchema);
 

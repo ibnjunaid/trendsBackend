@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "ts-node src/start.ts",
+    "dev":  "nodemon src/start.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

@@ -21,7 +21,7 @@ const interval = 900000;
 const PORT = Number(process.env.PORT) || 8080;
 const HOST = process.env.HOST || '0.0.0.0';
 
-
+/*
 const endPoints1 = [
     "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/samao",
     "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/ritikh",
@@ -47,10 +47,6 @@ async function fetchTrends(endPoints:string[]){
     }));
 }
 
-app.listen(PORT,HOST,()=>{
-    console.log('Server started on', new Date().toString())
-    console.log(`Server listening on ${PORT}`)
-});
 
 // This function basically prevents heroku 
 // from turing of the server because of inactivity
@@ -89,3 +85,10 @@ const i2 = setInterval(()=>{
         })
     },16*60*1000)
 },32*60*1000)
+*/
+
+app.listen(PORT,HOST,()=>{
+    console.log('Server started on', new Date().toString())
+    console.log(`Server listening on ${PORT}`)
+});
+

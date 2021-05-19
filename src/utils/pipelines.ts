@@ -36,57 +36,35 @@ export const sortByMaxTweetVolume = [
   }
 ]
 
-export const TrendingLocationsPipe = (trend:string) => {
-    return ([
-      {
-          '$unwind': {
-              'path': '$trends'
-          }
-      }, {
-          '$project': {
-              'trend': '$trends.name', 
-              'volume': '$trends.tweet_volume', 
-              'index': '$trends.index', 
-              'place': '$name', 
-              'as_of': 1
-          }
-      }, {
+export const TrendingLocationsPipe = (hashtag:string) => {
+    return (
+      [
+        {
           '$match': {
-              'trend': trend
+            'trends.name': hashtag
           }
-      }, {
-          '$sort': {
-              'as_of': -1
-          }
-      }, {
-          '$group': {
-              '_id': '$place', 
-              'fieldN': {
-                  '$push': '$$ROOT'
-              }
-          }
-      }, {
+        }, {
           '$project': {
-              '_id': 0, 
-              'trend': {
-                  '$arrayElemAt': [
-                      '$fieldN', 0
-                  ]
+            '_id': 0, 
+            'as_of': 1, 
+            'name': 1, 
+            'trend': {
+              '$first': {
+                '$filter': {
+                  'input': '$trends', 
+                  'as': 'trend', 
+                  'cond': {
+                    '$eq': [
+                      '$$trend.name', hashtag
+                    ]
+                  }
+                }
               }
+            }
           }
-      }, {
-          '$sort': {
-              'trend.index': 1
-          }
-      }, {
-          '$project': {
-              'index': '$trend.index', 
-              'as_of': '$trend.as_of', 
-              'volume': '$trend.volume', 
-              'place': '$trend.place'
-          }
-      }
-  ])
+        }
+      ]
+    )
 }
 
 export const FirstTrending = (trend : String) => {

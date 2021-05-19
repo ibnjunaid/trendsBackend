@@ -97,15 +97,16 @@ export const getTrendsWithMaxTweetVolume = async (req:Request, res:Response) => 
 export const getTrendDetails = async (req:Request, res :Response) => {
     try {
         const pipeline = TrendingLocationsPipe(req.body.trend);
+ 
         const trendingLocations = await trendObject.aggregate(pipeline);
-        const firstSeen  = ( await trendObject.aggregate(FirstTrending(req.body.trend)))[0] || {} 
+        // const firstSeen  = ( await trendObject.aggregate(FirstTrending(req.body.trend)))[0] || {} 
 
         if(trendingLocations.length){
             res.json({
                 status : true,
                 message : `Sucessfully fetched locations for trend : ${req.body.trend}`,
                 data : {
-                        firstSeen : firstSeen,
+                        // firstSeen : firstSeen,
                         trendingLocations
                     }
             })
