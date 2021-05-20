@@ -26,7 +26,7 @@ export const app = express();
 
 app.use(express.json());
 
-app.use('/static', express.static(path.join(__dirname, '../../public')))
+app.use(express.static(path.join(__dirname, '../public/')));
 
 //Allow Cross Origin Resource Sharing 
 app.use(cors());
@@ -43,10 +43,11 @@ app.use('/place',placeApis);
 
 
 //404 route matches when none of the above pattern matches
-app.use((req,res,next) =>{
-    console.log(req.url);
-    res.status(404).send({
-        url: req.url,
-        message : "Doesn't exist"
+app.get('/*',(req,res,) =>{
+    res.sendFile(path.join(__dirname, "../public/index.html"),(err)=>{
+        if(err){
+            console.error(err);
+            res.sendStatus(500);
+        }
     })
 })
