@@ -132,7 +132,7 @@ export const FirstTrending = (trend : String) => {
 
 export const ByNamePipe  =(name : String) => {
   return (
-    [
+  [
     {
         '$match': {
             'name': name
@@ -143,8 +143,12 @@ export const ByNamePipe  =(name : String) => {
         }
     }, {
         '$limit': 50
+    }, {
+        '$project': {
+            'trends.url': 0
+        }
     }
-]
+  ]
   )
 }
 
