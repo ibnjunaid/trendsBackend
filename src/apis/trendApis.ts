@@ -20,6 +20,5 @@ routes.post('/trend-details',getTrendDetails);
 
 routes.get('/*',NotFound);
 
-routes.post('/*',NotFound);
 
 export default routes;

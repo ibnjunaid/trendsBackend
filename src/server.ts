@@ -39,7 +39,7 @@ app.use(morgan("dev"));
 
 //Route to different paths
 app.use('/apis/',rootApis);
-app.use('/apis/trends/',trendApis);
+app.use('/apis/trends',trendApis);
 app.use('/place',placeApis);
 
 
