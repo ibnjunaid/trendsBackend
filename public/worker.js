@@ -1,7 +1,9 @@
 var CACHE_NAME = 'pwa-task-manager';
 var urlsToCache = [
   '/',
-  '/completed'
+  '/favicon.ico',
+  '/static/media/Social.158225d8.svg',
+  '/static/media/Trends.453b5a25.svg'
 ];
 
 // Install a service worker
@@ -25,7 +27,17 @@ self.addEventListener('fetch', event => {
         if (response) {
           return response;
         }
-        return fetch(event.request);
+        return fetch(event.request).then((response)=>{
+            if(!response || response.status !== 200 || response.type !== 'basic'){
+              return response;
+            }
+            const respToCache = response.clone();
+            caches.open(CACHE_NAME).then((cache) =>{
+              cache.put(event.request, respToCache);
+            });
+            console.log(respToCache);
+            return response;
+        })
       }
     )
   );

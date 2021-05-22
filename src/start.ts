@@ -24,14 +24,16 @@ const HOST = process.env.HOST || '0.0.0.0';
 const endPoints1 = [
     "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/samao",
     "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/ritikh",
-    "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/dzai"
+    "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/dzai",
+    "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/zaid2"
 ];
 
 
 const endPoints2 = [
     "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/samao2",
     "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/ritikh2",
-    "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/dzai2"
+    "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/dzai2",
+    "https://eu-gb.functions.appdomain.cloud/api/v1/web/Oibm_dev/default/zaid2II"
 ]
 
 function sleep(ms:number){
