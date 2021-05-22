@@ -28,14 +28,17 @@ self.addEventListener('fetch', event => {
           return response;
         }
         return fetch(event.request).then((response)=>{
+            const isStatic = (new URL(response.url)).pathname.split('/').includes('apis');
+            console.log((new URL(response.url)).pathname.split('/'));
             if(!response || response.status !== 200 || response.type !== 'basic'){
               return response;
+            } if(!isStatic){
+                const respToCache = response.clone();
+                caches.open(CACHE_NAME).then((cache) =>{
+                  cache.put(event.request, respToCache);
+                });
+                return response;
             }
-            const respToCache = response.clone();
-            caches.open(CACHE_NAME).then((cache) =>{
-              cache.put(event.request, respToCache);
-            });
-            console.log(respToCache);
             return response;
         })
       }
