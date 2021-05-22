@@ -12,8 +12,8 @@ export const getTrendByPlaceName = async (req:Request, res:Response) => {
         const placeName = urlencode.decode(String(req.query.placeName))
 
         const data = await trendObject.aggregate(ByNamePipe(placeName));
-        
-        if(data.length){
+                
+		if(data.length){
             res.json({
                 status : true,
                 message : `Fetched data for woeid : ${placeName}`,
