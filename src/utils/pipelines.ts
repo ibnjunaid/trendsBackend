@@ -132,25 +132,36 @@ export const FirstTrending = (trend : String) => {
 
 export const ByNamePipe  =(name : String) => {
   return (
-  [
-    {
-        '$match': {
-            'name': name
-        }
-    }, {
-        '$sort': {
-            '_id': -1
-        }
-    }, {
-        '$limit': 20
-    }, {
-        '$project': {
-            'createdAt': 0, 
-            'updatedAt': 0, 
-            '__v': 0, 
-            'trends.url': 0
-        }
+[
+  {
+    '$match': {
+      'name': name
     }
+  }, {
+    '$sort': {
+      '_id': -1
+    }
+  }, {
+    '$limit': 30
+  }, {
+    '$sort': {
+      'trends.index': 1
+    }
+  }, {
+    '$project': {
+      'name': 1, 
+      'as_of': 1, 
+      'trends': {
+        '$slice': [
+          '$trends', 20
+        ]
+      }
+    }
+  }, {
+    '$project': {
+      'trends.url': 0
+    }
+  }
 ]
   )
 }
