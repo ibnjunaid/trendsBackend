@@ -142,13 +142,16 @@ export const ByNamePipe  =(name : String) => {
             '_id': -1
         }
     }, {
-        '$limit': 50
+        '$limit': 20
     }, {
         '$project': {
+            'createdAt': 0, 
+            'updatedAt': 0, 
+            '__v': 0, 
             'trends.url': 0
         }
     }
-  ]
+]
   )
 }
 
