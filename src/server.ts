@@ -7,6 +7,9 @@ import rootApis from './apis/rootApis';
 import placeApis from './apis/placeApis';
 import bodyParser from 'body-parser';
 import compression from 'compression';
+import sslRedirect from 'heroku-ssl-redirect';
+
+
 const morgan = require('morgan')
 
 
@@ -23,6 +26,8 @@ mongoose.connect(process.env.ATLAS_MONGO_URI ||'',{
 })
 
 export const app = express();
+
+app.use(sslRedirect());
 
 app.use(express.json());
 
