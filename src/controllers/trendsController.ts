@@ -11,7 +11,11 @@ export const getTrendByPlaceName = async (req:Request, res:Response) => {
     try { 
         const placeName = urlencode.decode(String(req.query.placeName))
 
+        console.log(placeName);
+
         const data = await trendObject.aggregate(ByNamePipe(placeName));
+
+        console.log(data);
                 
 		if(data.length){
             res.json({

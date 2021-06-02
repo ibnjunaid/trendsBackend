@@ -1,7 +1,19 @@
 {
   "short_name": "Twitter Trends",
-  "name": "Twitter Trends Visual Tool",
+  "name": "Twitter Trends",
   "icons": [
+    {
+      "src": "manifest-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "manifest-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
     {
       "src": "favicon.ico",
       "sizes": "64x64 32x32 24x24 12x12",
@@ -9,8 +21,8 @@
       "purpose": "maskable any"
     },
     {
-      "src": "manifest-icon-512.png",
-      "sizes": "512x512",
+      "src": "manifest-icon-192.png",
+      "sizes": "191X192",
       "type": "image/png",
       "purpose": "maskable any"
     }

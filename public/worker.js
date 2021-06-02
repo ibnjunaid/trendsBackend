@@ -28,9 +28,7 @@ self.addEventListener('fetch', event => {
           return response;
         }
         return fetch(event.request).then((response)=>{
-            console.log(response.url);
             const isStatic = (new URL(response.url)).pathname.split('/').includes('apis');
-            console.log((new URL(response.url)).pathname.split('/'));
             if(!response || response.status !== 200 || response.type !== 'basic'){
               return response;
             } if(!isStatic){

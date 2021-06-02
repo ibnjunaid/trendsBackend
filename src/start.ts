@@ -52,13 +52,14 @@ async function fetchTrends(endPoints:string[]){
 // This function basically prevents heroku 
 // from turing of the server because of inactivity
 
-const pingSelfInterval = setInterval(async ()=>{
-    try {
-        await axios.get("https://trendsend.herokuapp.com/ping");
-    } catch (error) {
-        console.error("What the hell !! Cant ping self");
-    }
-},30000);
+// const pingSelfInterval = setInterval(async ()=>{
+//     try {
+//         await axios.get("https://trendsend.herokuapp.com/ping");
+//     } catch (error) {
+//         console.error("What the hell !! Cant ping self");
+//     }
+// },30000);
+
 
 cron.schedule('0 0 0 * * 0',async() =>{
     console.log('Cron  Called on ' ,Date().toString());

@@ -139,7 +139,7 @@ export const ByNamePipe  =(name : String) => {
     }
   }, {
     '$sort': {
-      '_id': -1
+      'as_of': -1
     }
   }, {
     '$limit': 30
