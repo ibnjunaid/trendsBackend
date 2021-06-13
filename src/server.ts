@@ -27,7 +27,7 @@ mongoose.connect(process.env.ATLAS_MONGO_URI ||'',{
 
 export const app = express();
 
-app.use(sslRedirect());
+app.use(sslRedirect(['production','other','development'],301));
 
 app.use(express.json());
 
