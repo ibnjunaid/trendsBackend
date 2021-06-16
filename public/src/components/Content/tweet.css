@@ -1,0 +1,143 @@
+
+@media all and (min-width: 768px) {
+    .trends-cont {
+        display: flex;
+        overflow-x: auto;
+        position: relative;
+        margin: 0 0 50px 20px;
+    }
+
+    .scroll-buttons {
+        display: flex;
+        justify-content: space-between;
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    .right-button,
+    .left-button {
+        display: block;
+        font-size: 2.7em;
+        cursor: pointer;
+        color: #017acd;
+    }
+
+    .right-button:active,
+    .left-button:active {
+        color: #003e80;
+    }
+    
+    div.card {
+        display: flex;
+        flex-direction: column;
+        margin: 40px 20px;
+        height: fit-content;
+        border-radius: 5px;
+        background-color: #fff;
+        /* width: 250px; */
+        border: 1px solid #eee;
+            box-shadow: rgba(0, 0, 0, 0.15) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px;
+    }
+    
+    div > h4 {
+        text-align: center;
+        white-space: nowrap;
+        border-bottom: 1px solid #ddd;
+        font-size: 1.1em;
+        padding: 8px;
+        font-weight: 500;
+    }
+    
+    .tweets {
+        counter-reset: count;
+    }
+    
+    .tweet-names {
+        display: grid;
+        grid-template-areas: "left top"
+                            "left bottom";
+        padding: 9px;
+        justify-content: flex-start;
+        list-style: none;
+        text-decoration: none;
+        border-bottom: 1px solid #ddd;
+        white-space: nowrap;
+        position: relative;
+        font-size: 1em;
+    }
+
+    .tweet-volume {
+        font-size: 0.8em;
+        font-family: montserrat;
+        padding-top: 2px;
+        color: #000;
+        grid-area: bottom;
+    }
+
+    .tweet-names:hover {
+        background-color: #f1f1f1;
+        cursor: pointer;
+    }
+
+    .index {
+        grid-area: left;
+        align-self: center;
+        font-size: 0.8em;
+        padding-right: 10px;
+        padding-left: 2px;
+    }
+
+    .tweet-names::before {
+        color: #000;
+        grid-area: left;
+        align-self: center;
+        font-size: 0.8em;
+        padding-right: 10px;
+        padding-left: 2px;
+        counter-increment: count;
+        content: counter(count);
+    }
+
+    .close-11,
+    .close-12,
+    .close-13,
+    .close-14,
+    .close-15,
+    .close-16,
+    .close-17,
+    .close-18,
+    .close-19,
+    .close-20 {
+        display: none;
+    }
+
+    .hide {
+        content: 'Hide';
+    }
+
+    .show {
+        content: 'Show More';
+    }
+
+    .tweet-names-1::before {
+        font-size: 1.7em;
+    }
+    .tweet-names-2::before {
+        font-size: 1.4em;
+    }
+    .tweet-names-3::before {
+        font-size: 1.3em;
+    }
+
+    .tweet-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50px;
+        font-size: 1.3em;
+    }
+
+    .tweet-btn > .btn:active {
+        background-color: #0b6fb3;
+    }
+}
