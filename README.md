@@ -4,4 +4,4 @@
     <!-Tag line here and a write a short description->
 </div>
 
-# Repo conatining code for backend microservice
+# Repo containing code for backend microservice
