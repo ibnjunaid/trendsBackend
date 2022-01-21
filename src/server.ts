@@ -2,6 +2,7 @@ import express from 'express';
 import * as path from 'path';
 import cors from 'cors';
 import trendApis from './apis/trendApis';
+import { getNewPlaces } from './utils/weeklyFuncs';
 import mongoose from 'mongoose';
 import rootApis from './apis/rootApis';
 import placeApis from './apis/placeApis';
@@ -12,7 +13,6 @@ import sslRedirect from 'heroku-ssl-redirect';
 
 const morgan = require('morgan')
 
-
 mongoose.connect(process.env.ATLAS_MONGO_URI ||'',{
     useNewUrlParser : true,
     useUnifiedTopology : true
@@ -22,6 +22,9 @@ mongoose.connect(process.env.ATLAS_MONGO_URI ||'',{
         throw err;
     } else {
         console.log(`In convo with ATlas`);
+        getNewPlaces().then (() => {
+            console.log('Places fetch started on', Date.now());
+        })
     }
 })
 
@@ -34,7 +37,7 @@ app.use(express.json());
 //Use compression 
 app.use(compression());
 
-app.use(express.static(path.join(__dirname, '../public/')));
+app.use(express.static(path.join(__dirname, '../front-end/build')));
 
 //Allow Cross Origin Resource Sharing 
 app.use(cors());

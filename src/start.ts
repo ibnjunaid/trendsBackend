@@ -48,10 +48,6 @@ async function fetchTrends(endPoints:string[]){
     }));
 }
 
-//get places on every restart 
-getNewPlaces().then (() => {
-    console.log('Places fetch started on', Date.now());
-})
 
 cron.schedule('0 0 0 * * 0',async() =>{
     console.log('Cron  Called on ' ,Date().toString());
